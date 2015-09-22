@@ -83,8 +83,7 @@ public class JardanExceptionCalc extends HttpServlet {
 				for (int i = 0; i < x; i++) {
 					if(start_matrix[i][0]==0){
 						for (int j = 1; j < y; j++) {
-						  for (int column: Data.k){
-							  if(j!=column){
+							  if(Data.k.indexOf(j)==-1){
 								  if(start_matrix[i][j]==0){
 									  Data.result=true;
 								  }
@@ -93,7 +92,6 @@ public class JardanExceptionCalc extends HttpServlet {
 									  Data.result=false;
 								  }
 							  }
-						  }
 						}
 						
 					}
@@ -110,7 +108,7 @@ public class JardanExceptionCalc extends HttpServlet {
 							}
 						}*/
 		}
-		if (Data.k.indexOf(replacement_y) == (-1)||Data.result==true) {
+		if (Data.k.indexOf(replacement_y) == (-1)||Data.result==false) {
 			/* вычисление матрицы после перестановки */
 			for (int i = 0; i < x; i++)
 				for (int j = 0; j < y; j++) {
@@ -153,11 +151,12 @@ public class JardanExceptionCalc extends HttpServlet {
 		out.println("<h1>------------------</h1>");
 		if (Data.k.indexOf(replacement_y-1) != (-1)) {
 			out.println("you have chosen has already found a column , choose another");
-			
+			end_matrix=start_matrix;
 			
 		}
 		if (Data.result==true){
 			out.println("<h1>picked up the win column</h1>");
+			end_matrix=start_matrix;
 		}
 		out.println("<TABLE border=1px>");
 
