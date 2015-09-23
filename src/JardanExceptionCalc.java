@@ -79,23 +79,6 @@ public class JardanExceptionCalc extends HttpServlet {
 			replacement_x = Integer.parseInt(b[0])+1;
 			replacement_y = Integer.parseInt(b[2])+1;
 			start_matrix=Data.s_matrix;
-			/*проверка на множественное решение*/
-				for (int i = 0; i < x; i++) {
-					if(start_matrix[i][0]==0){
-						for (int j = 1; j < y; j++) {
-							  if(Data.k.indexOf(j)==-1){
-								  if(start_matrix[i][j]==0){
-									  Data.result=true;
-								  }
-								  else
-								  {
-									  Data.result=false;
-								  }
-							  }
-						}
-						
-					}
-				}
 				/*проверка на единственное решение
 						for (int j = 0; j < y; j++) {
 							for (int column: Data.k){
@@ -130,7 +113,25 @@ public class JardanExceptionCalc extends HttpServlet {
 				}
 			end_matrix[replacement_x - 1][replacement_y - 1] = 1 / (start_matrix[replacement_x - 1][replacement_y - 1]);
 
+			/*проверка на множественное решение*/
+			for (int i = 0; i < x; i++) {
+				if(end_matrix[i][0]==0){
+					for (int j = 1; j < y; j++) {
+						  if(Data.k.indexOf(j)==-1){
+							  if(end_matrix[i][j]==0){
+								  Data.result=true;
+							  }
+							  else
+							  {
+								  Data.result=false;
+							  }
+						  }
+					}
+					
+				}
+			}
 		}
+		Data.k.add(replacement_y-1);
 		/* вывод таблиц на страницу */
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(
 				response.getOutputStream(), "UTF8"), true);
@@ -149,11 +150,6 @@ public class JardanExceptionCalc extends HttpServlet {
 		}
 		out.println("</TABLE>");
 		out.println("<h1>------------------</h1>");
-		if (Data.k.indexOf(replacement_y-1) != (-1)) {
-			out.println("you have chosen has already found a column , choose another");
-			end_matrix=start_matrix;
-			
-		}
 		if (Data.result==true){
 			out.println("<h1>picked up the win column</h1>");
 			end_matrix=start_matrix;
@@ -163,6 +159,7 @@ public class JardanExceptionCalc extends HttpServlet {
 		for (int i = 0; i < x; i++) {
 			out.println("<tr>");
 			for (int j = 0; j < y; j++) {
+			if((Data.k.indexOf(j)==-1)||(j==0)){
 				out.println("<td>");
 				out.println("<form name='form " + i + "/" + j
 						+ "' action='JardanExceptionCalc' method='post'>");
@@ -178,11 +175,11 @@ public class JardanExceptionCalc extends HttpServlet {
 				out.println("</td>");
 				k = k + 1;
 			}
+			}
 			out.println("</tr>");
 
 		}
 		Data.s_matrix=end_matrix;
-		Data.k.add(replacement_y-1);
 		out.println("</TABLE>");
 		for (int column: Data.k){
 			out.println(column+"|");
