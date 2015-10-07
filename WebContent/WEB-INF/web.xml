@@ -36,4 +36,14 @@
     <servlet-name>JardanExceptionCalc</servlet-name>
     <url-pattern>/JardanExceptionCalc</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>Clear</display-name>
+    <servlet-name>Clear</servlet-name>
+    <servlet-class>Clear</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Clear</servlet-name>
+    <url-pattern>/Clear</url-pattern>
+  </servlet-mapping>
 </web-app>

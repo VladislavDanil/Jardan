@@ -9,14 +9,33 @@
 <title>Insert title here</title>
 </head>
 <body>
-  <h1>Введите значения коэффициентов</h1>
-  <form name="form" action="JardanExceptionCalc" method="post">
-  <mytag:in_tab x_start="${x_start}" y_start="${y_start}">
-  </mytag:in_tab>
-  Строка <input type="text" name="replacement_x" value="" />
-  Столбец <input type="text" name="replacement_y" value="" />
-  <input type="hidden" name="verification" value="0">
-  <input type="submit" value="Да" />
-  </form>
+	<h1>Введите значения коэффициентов</h1>
+	<form name="form" action="JardanExceptionCalc" method="post" onsubmit="return validate()">
+		<mytag:in_tab x_start="${x_start}" y_start="${y_start}">
+		</mytag:in_tab>
+		Строка <input type="text" name="replacement_x" value="" /> Столбец 
+		<input
+			type="text" name="replacement_y" value="" /> 
+			<input type="hidden"
+			name="verification" value="0"> <br />
+			<span style="color: red" id="nf2"></span><br />
+		<span style="color: red" id="nf"></span><br />
+			<input type="submit"
+			value="Да" />
+	</form>
+
+<script type="text/javascript">
+		function validate() {
+			//Считаем значения из полей в переменные
+			var x_start = document.forms["form"]["replacement_x"].value;
+			var y_start = document.forms["form"]["replacement_y"].value;
+			//Если поле пустое выведем сообщение и предотвратим отправку формы
+			if (!form.x_start.value.match(/^[0-9]+$/) || replacement_x==0 || replacement_x<2 || replacement_y<2
+					|| !form.y_start.value.match(/^[0-9]+$/)|| replacement_y==0) {
+				document.getElementById("nf2").innerHTML = "вводить можно только цифры не меньше 2";
+				return false;
+			}
+		}
+	</script>
 </body>
 </html>
