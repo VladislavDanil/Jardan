@@ -44,7 +44,8 @@ public class JardanExceptionCalc extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-     protected void doPost(HttpServletRequest request,
+
+	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		int x = Integer.parseInt(Data.x_start);
 		int y = Integer.parseInt(Data.y_start);
@@ -60,10 +61,25 @@ public class JardanExceptionCalc extends HttpServlet {
 		if (request.getParameter("input_form") == "1") {
 			Data.retry = false;
 		}
+		try{
+			@SuppressWarnings("unused")
+			String a = new String(request.getParameter("input_form").getBytes(
+					"ISO-8859-1"), "UTF-8");
+		}
+		catch(NullPointerException e){
+			Data.retry = false;
+		}
 		if (Data.retry == false) {
+			Data.k.clear();
+			Data.saveColumn.clear();
+			Data.s.clear();
+			Data.result=false;
+			Data.not_result=false;
+			Data.one_result=false;
 			Data.k.add(0);
 			int num = 1;
 			/* чтение данных из html в массив */
+			
 			for (int i = 0; i < x; i++)
 				for (int j = 0; j < y; j++) {
 					start_matrix[i][j] = Integer.parseInt(new String(request
@@ -210,8 +226,6 @@ public class JardanExceptionCalc extends HttpServlet {
 					out.print("<br>");
 					out.print("x" + (column+1) + "=" + "a" + d);
 			}
-
-			end_matrix = start_matrix;
 		}
 
 		/* вывод несовместимости системы */
