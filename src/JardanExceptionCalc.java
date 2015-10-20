@@ -178,7 +178,8 @@ public class JardanExceptionCalc extends HttpServlet {
 		/* вывод таблиц на страницу */
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(
 				response.getOutputStream(), "UTF8"), true);
-		out.println("<HTML><HEAD><TITLE>");
+		out.println("<HTML><HEAD>"
+				+ "<TITLE>");
 		out.println("</TITLE></HEAD><BODY>");
 		out.println("<h1>-----------------</h1>");
 		out.println("<TABLE border=1px>");
@@ -195,7 +196,7 @@ public class JardanExceptionCalc extends HttpServlet {
 		out.println("</TABLE>");
 		out.println("<h1>------------------</h1>");
 		/* вывод на экран результата */
-		if (Data.result == true) {
+		if ((Data.result == true)&&(start_matrix[replacement_x-1][replacement_y-1]!=0)) {
 			out.println("<h1>picked up the win column</h1>");
 			/* вывод результата на экран */
 
@@ -229,11 +230,11 @@ public class JardanExceptionCalc extends HttpServlet {
 		}
 
 		/* вывод несовместимости системы */
-		if (Data.not_result == true) {
+		if ((Data.not_result == true)&&(start_matrix[replacement_x-1][replacement_y-1]!=0)) {
 			out.print("system is not compatible");
 		}
 		/* вывод единственного решения */
-		if (Data.one_result == true) {
+		if ((Data.one_result == true)&&(start_matrix[replacement_x-1][replacement_y-1]!=0)) {
 			out.print("the system has one solution");
 			Set<Map.Entry<Integer, Integer>> set = Data.saveColumn.entrySet();
 			int i=-1;
@@ -242,7 +243,14 @@ public class JardanExceptionCalc extends HttpServlet {
 				out.print("<br>");
 				out.print("x" + me.getValue() + "=" + end_matrix[i][0]);
 			}
-			end_matrix = start_matrix;
+		}
+		/*обработка ввода 0*/
+		if (start_matrix[replacement_x-1][replacement_y-1]==0) {
+			out.print("iput 0!!!");
+			end_matrix=start_matrix;
+			Data.one_result=false;
+			Data.not_result=false;
+			Data.result=false;
 		}
 		out.println("<TABLE border=1px>");
 		if ((Data.result == true) || (Data.not_result == true)
@@ -260,7 +268,45 @@ public class JardanExceptionCalc extends HttpServlet {
 				out.println("</tr>");
 			}
 			out.println("</TABLE>");
-		} else {
+		} else 
+		if (start_matrix[replacement_x-1][replacement_y-1]==0){
+			for (int i = 0; i < x; i++) {
+				out.println("<tr>");
+				for (int j = 0; j < y; j++) {
+						out.println("<td>");
+						out.println("<form name='form "
+								+ i
+								+ "/"
+								+ j
+								+ "' action='JardanExceptionCalc' method='post'"
+								+ "onsubmit='return lert('"+i+"|"+j+"|"+k+"','"+k+"')'>");
+						out.println("<button type='submit' name='input_form' value='"
+								+ i
+								+ "|"
+								+ j
+								+ "|"
+								+ k
+								+ "' "
+								+ "id='"
+								+ i
+								+ "|"
+								+ j
+								+ "|"
+								+ k
+								+ "' size='2'/>"
+								+ end_matrix[i][j] + "</button>");
+						out.println("<span style='color: red' id='"+k+"'></span><br />");
+						out.println("</form>");
+						out.println("</td>");
+						k = k + 1;
+				}
+				out.println("</tr>");
+
+			}
+			Data.s_matrix = end_matrix;
+			out.println("</TABLE>");
+		}
+		else{
 
 			for (int i = 0; i < x; i++) {
 				out.println("<tr>");
@@ -271,8 +317,16 @@ public class JardanExceptionCalc extends HttpServlet {
 								+ i
 								+ "/"
 								+ j
-								+ "' action='JardanExceptionCalc' method='post'>");
+								+ "' action='JardanExceptionCalc' method='post'"
+								+ "onsubmit='return lert('"+i+"|"+j+"|"+k+"','"+k+"')'>");
 						out.println("<button type='submit' name='input_form' value='"
+								+ i
+								+ "|"
+								+ j
+								+ "|"
+								+ k
+								+ "' "
+								+ "id='"
 								+ i
 								+ "|"
 								+ j
@@ -280,6 +334,7 @@ public class JardanExceptionCalc extends HttpServlet {
 								+ k
 								+ "' size='2'/>"
 								+ end_matrix[i][j] + "</button>");
+						out.println("<span style='color: red' id='"+k+"'></span><br />");
 						out.println("</form>");
 						out.println("</td>");
 						k = k + 1;
@@ -291,7 +346,15 @@ public class JardanExceptionCalc extends HttpServlet {
 			Data.s_matrix = end_matrix;
 			out.println("</TABLE>");
 		}
-		out.println("</BODY></HTML>");
+		out.println(""
+				+ "<script type='text/javascript'>"
+				+ "function  lert(id,k){n = document.document.getElementById(id).innerHTML;"
+				+ "if(n==0){"
+				+ "document.getElementById(k).innerHTML = 'вы ввели 0';"
+						+ "return false;"
+						+ "}"
+						+ "}"
+						+ "</script></BODY></HTML>");
 		out.close();
 		
 		/* приравниваем переменную индикатора повтора к true */
